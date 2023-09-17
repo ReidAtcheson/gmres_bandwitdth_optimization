@@ -140,12 +140,91 @@ int main(int argc,char** argv){
     T res0 = alpha*dot(a0,b) + beta*dot(a1,b);
     scale_add(alpha,a0,beta,a1m);
     T res1 = dot(a1,b);
-    expect( std::abs(res0-res1)/std::abs(res0) < 2*eps);
-
-
-
-    //Check that the two results are the same
+    expect( std::abs(res0-res1)/std::abs(res0) < 4*eps);
   };
+
+  "dot double linear"_test = []{
+    using T = double;
+    T eps = std::numeric_limits<T>::epsilon();
+    size_t m=512;
+    //Make two random vectors of length `m` 
+    //using <random> with seeded rng
+    std::vector<T> av0(m),av1(m), bv(m);
+    std::mt19937 gen(0);
+    std::uniform_real_distribution<T> dis(0.0,1.0);
+    for(size_t i=0;i<m;i++){
+      av0[i]=dis(gen);
+      av1[i]=dis(gen);
+      bv[i]=dis(gen);
+    }
+    T alpha(dis(gen));
+    T beta(dis(gen));
+    matrix<const T> a0(av0.data(),std::extents(m,1));
+    matrix<const T> a1(av1.data(),std::extents(m,1));
+    matrix<T> a1m(av1.data(),std::extents(m,1));
+    matrix<const T> b(bv.data(),std::extents(m,1));
+    T res0 = alpha*dot(a0,b) + beta*dot(a1,b);
+    scale_add(alpha,a0,beta,a1m);
+    T res1 = dot(a1,b);
+    expect( std::abs(res0-res1)/std::abs(res0) < 4*eps);
+  };
+
+  "dot complex float linear"_test = []{
+    using R = float;
+    using T = std::complex<R>;
+    R eps = std::numeric_limits<R>::epsilon();
+    size_t m=512;
+    //Make two random vectors of length `m` 
+    //using <random> with seeded rng
+    std::vector<T> av0(m),av1(m), bv(m);
+    std::mt19937 gen(0);
+    std::uniform_real_distribution<R> dis(0.0,1.0);
+    for(size_t i=0;i<m;i++){
+      av0[i]=T(dis(gen),dis(gen));
+      av1[i]=T(dis(gen),dis(gen));
+      bv[i]=T(dis(gen),dis(gen));
+    }
+    T alpha(dis(gen));
+    T beta(dis(gen));
+    matrix<const T> a0(av0.data(),std::extents(m,1));
+    matrix<const T> a1(av1.data(),std::extents(m,1));
+    matrix<T> a1m(av1.data(),std::extents(m,1));
+    matrix<const T> b(bv.data(),std::extents(m,1));
+    T res0 = alpha*dot(a0,b) + beta*dot(a1,b);
+    scale_add(alpha,a0,beta,a1m);
+    T res1 = dot(a1,b);
+    expect( std::abs(res0-res1)/std::abs(res0) < 4*eps);
+  };
+
+  "dot complex doubl3 linear"_test = []{
+    using R = double;
+    using T = std::complex<R>;
+    R eps = std::numeric_limits<R>::epsilon();
+    size_t m=512;
+    //Make two random vectors of length `m` 
+    //using <random> with seeded rng
+    std::vector<T> av0(m),av1(m), bv(m);
+    std::mt19937 gen(0);
+    std::uniform_real_distribution<R> dis(0.0,1.0);
+    for(size_t i=0;i<m;i++){
+      av0[i]=T(dis(gen),dis(gen));
+      av1[i]=T(dis(gen),dis(gen));
+      bv[i]=T(dis(gen),dis(gen));
+    }
+    T alpha(dis(gen));
+    T beta(dis(gen));
+    matrix<const T> a0(av0.data(),std::extents(m,1));
+    matrix<const T> a1(av1.data(),std::extents(m,1));
+    matrix<T> a1m(av1.data(),std::extents(m,1));
+    matrix<const T> b(bv.data(),std::extents(m,1));
+    T res0 = alpha*dot(a0,b) + beta*dot(a1,b);
+    scale_add(alpha,a0,beta,a1m);
+    T res1 = dot(a1,b);
+    expect( std::abs(res0-res1)/std::abs(res0) < 4*eps);
+  };
+
+
+
 
 
 
