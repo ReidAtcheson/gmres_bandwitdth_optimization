@@ -8,6 +8,14 @@ template<typename T>
 using matrix = std::mdspan<T,std::extents<size_t,std::dynamic_extent,std::dynamic_extent>, std::layout_left>;
 
 
+namespace std{
+  float conj(const float& in){
+    return in;
+  }
+  double conj(const double& in){
+    return in;
+  }
+}
 
 static std::atomic<long long> global_flops_counter(0);
 static std::atomic<long long> global_bytes_read_counter(0);
