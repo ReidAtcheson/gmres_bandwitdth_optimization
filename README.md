@@ -24,3 +24,9 @@ vectors `W` that are no longer orthonormal but still satisfy `A*Wk = W*H` and th
 `W` is not very large.
 
 
+
+I have found that reusing `H` in this way barely impacts the convergence rate of restarted GMRES but at the cost of having to "reorthogonalize" `W` which implicitly occurs
+when solving least-squares systems with this matrix (because least-squares methods mostly use householder QR). So we gain in no longer needing to do dot products in the formation
+of `H` which eliminates a significant number of memory reads, but it also elminates a loop-carried data dependency that previously prevented the fusion of inner gmres iterations.
+Reorthogonalization of `W` comes with a cost but since we can accomplish that with level-3 BLAS operations and only requires reading in `W` once, an `O(m*k)` number of reads, as opposed
+to computing `O(k^2)` dot products which requires `O(m*k^2)` reads and can not be cached because of the data dependencies of gram-schmidt orthogonalization used to compute `H`
