@@ -1,5 +1,5 @@
 # (WIP): gmres_bandwitdth_optimization
-optimizing bandwidth utilization for restarted gmres
+optimizing bandwidth utilization for restarted gmres.
 
 
 This will implement a bare-bones restarted gmres. I will go through a sequence of optimizations intended to explore how to better
@@ -30,3 +30,12 @@ when solving least-squares systems with this matrix (because least-squares metho
 of `H` which eliminates a significant number of memory reads, but it also elminates a loop-carried data dependency that previously prevented the fusion of inner gmres iterations.
 Reorthogonalization of `W` comes with a cost but since we can accomplish that with level-3 BLAS operations and only requires reading in `W` once, an `O(m*k)` number of reads, as opposed
 to computing `O(k^2)` dot products which requires `O(m*k^2)` reads and can not be cached because of the data dependencies of gram-schmidt orthogonalization used to compute `H`
+
+
+
+# DISCLAIMER:
+
+This is not going to be a highly engineered software product but the minimum code necessary to prove out the concepts listed above. Have fun with it, but there will be many missing 
+important corner cases that I just ignore (e.g. GMRES breakdown). I have also found it easier in many cases to 
+simply duplicate code to handle different cases (real vs complex case) rather than come up with the best generalized C++ code that seamlessly handles both cases. The generalized
+approach clearly is better from long-term maintenance point of view, but again this is just some experiments.
